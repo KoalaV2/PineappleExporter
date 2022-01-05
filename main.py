@@ -9,7 +9,7 @@ import os
 
 load_dotenv()
 PINEAPPLE_IP=os.getenv("PINEAPPLE_IP")
-PINEAPPLE_PASS=os.getenv('PINEAPPLE_IP')
+PINEAPPLE_PASS=os.getenv('PINEAPPLE_PASS')
 
 cpugauge = prometheus_client.Gauge('pineapple_cpu', 'Pineapples CPU Usage')
 ramgauge = prometheus_client.Gauge('pineapple_memory', 'Pineapples RAM Usage')
