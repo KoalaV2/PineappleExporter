@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 
-import requests
 import json
 import time
 import prometheus_client
 from dotenv import load_dotenv
+import urllib3
 import os
 
 load_dotenv()
@@ -17,10 +17,12 @@ clientsgague = prometheus_client.Gauge('pineapple_clients', 'Pineapples current 
 rootusagegauge = prometheus_client.Gauge('pineapple_rootusage', 'Pineapples root disk usage')
 prevclientsgauge = prometheus_client.Gauge('pineapple_prevclients', 'Pineapples previously connected clients')
 
+http = urllib3.PoolManager()
+
 def auth():
     data = '{"username": "root", "password": "' + PINEAPPLE_PASS + '"}'
-    response = requests.post(f'http://{PINEAPPLE_IP}:1471/api/login', data=data)
-    responsedata = json.loads(response.text)
+    response = http.request('POST', f'http://{PINEAPPLE_IP}:1471/api/login', body=data)
+    responsedata = json.loads(response.data.decode('utf-8'))
     token = responsedata['token']
     return token
 
@@ -37,8 +39,8 @@ def data(token):
         'Cache-Control': 'max-age=0',
     }
 
-    response = requests.get(f'http://{PINEAPPLE_IP}:1471/api/dashboard/cards', headers=headers)
-    jsondata = json.loads(response.text)
+    response = http.request('GET', f'http://{PINEAPPLE_IP}:1471/api/dashboard/cards', headers=headers)
+    jsondata = json.loads(response.data.decode('utf-8'))
     print(json.dumps(jsondata, indent=4, sort_keys=True))
     clients = jsondata['clientsConnected']
     diskusage = jsondata['diskUsage']
