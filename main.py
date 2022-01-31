@@ -28,15 +28,7 @@ def auth():
 
 def data(token):
     headers = {
-        'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64; rv:95.0) Gecko/20100101 Firefox/95.0',
-        'Accept': 'application/json, text/plain, */*',
-        'Accept-Language': 'en-US,en;q=0.5',
-        'Accept-Encoding': 'gzip, deflate',
         'Authorization': token,
-        'Connection': 'keep-alive',
-        'Sec-GPC': '1',
-        'DNT': '1',
-        'Cache-Control': 'max-age=0',
     }
 
     response = http.request('GET', f'http://{PINEAPPLE_IP}:1471/api/dashboard/cards', headers=headers)
